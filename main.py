@@ -17,7 +17,7 @@ def dataFrame():
     df = pd.read_csv("6 class csv.csv")
 
     ### Check for any missing values
-    print(df.isnull().sum())
+    df.isnull().sum()
     
     ### Features (X) and target variable (y)
     X = df.drop(columns=['Spectral Class', 'Star type'])  ### Features (excluding non-predictive columns)
@@ -25,8 +25,10 @@ def dataFrame():
     
     ### Encode the target variable 'Spectral Class' with LabelEncoder
     label_enc_spectral = LabelEncoder()
+    #print(df["Spectral Class"])
     df['Spectral Class'] = label_enc_spectral.fit_transform(df['Spectral Class'])
-    
+    #print(df['Spectral Class'])
+    #exit(1)
     ### Store the class names for inverse transformation later
     spectral_classes = label_enc_spectral.classes_
     
