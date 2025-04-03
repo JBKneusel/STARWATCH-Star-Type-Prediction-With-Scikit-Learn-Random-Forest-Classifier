@@ -1,6 +1,10 @@
-""" Star type prediction with random forest classifier
+""" 
+    Project Name: Star Spectral Classification Prediction Application Utilizing an Sklearn Random Forest Classifier
 	Author: Joseph Kneusel
-	Model: Random Forest Classfier
+    Contact: https://github.com/JBKneusel
+    License: MIT License
+	ML Models: Random Forest Classifier
+    Foundation: Python, Kivy, Sklearn, Numpy, Pandas, Matplotlib, Seaborn
 """
 
 """Libraries"""
@@ -13,6 +17,68 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, classification_report
 from sklearn.preprocessing import LabelEncoder
 from sklearn.metrics import confusion_matrix
+from kivy.app import App
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.gridlayout import GridLayout
+from kivy.uix.button import Button
+from kivy.uix.label import Label
+from kivy.uix.image import Image
+from kivy.uix.textinput import TextInput
+from kivy.uix.scrollview import ScrollView
+
+
+class StarUI(BoxLayout):
+    """Central Class for Tournament UI"""
+    def __init__(self, **var_args):
+        super(StarUI, self).__init__(**var_args)
+        #-------- Application Layout --------
+        self.cols = 5 
+        self.rows = 2
+
+        #-------- Input Fields Layout --------
+
+        # Observed Star Temperature Input Box
+        self.temperature_box = TextInput(hint_text="Enter Calculated Star Temperature (K)", size_hint=(0.7, 1), multiline=False) 
+        self.add_widget(self.temperature_box)
+
+        # Observed Star Temperature Input Box
+        self.luminosity_box = TextInput(hint_text="Enter Calculated Star Luminosity (L/Lo)", size_hint=(0.7, 1), multiline=False) 
+        self.add_widget(self.luminosity_box)
+
+        # Observed Star Temperature Input Box
+        self.radius_box = TextInput(hint_text="Enter Estimated Star Radius (R/Ro)", size_hint=(0.7, 1), multiline=False) 
+        self.add_widget(self.radius_box)
+
+        # Observed Star Temperature Input Box
+        self.magnitude_box = TextInput(hint_text="Enter Calculated Star Absolute magnitude(Mv)", size_hint=(0.7, 1), multiline=False) 
+        self.add_widget(self.magnitude_box)
+
+        # Observed Star Temperature Input Box
+        self.color_box = TextInput(hint_text="Enter Observed Star Color", size_hint=(0.7, 1), multiline=False) 
+        self.add_widget(self.color_box)
+        #TODO
+
+        #-------- Button Layout --------
+
+        # Submit Star Button
+        self.star_button = Button(text="Submit Star", on_press=self.try_star, size_hint=(0.3, 1), background_color=(0.2, 0.6, 1, 1), bold=True) 
+        self.add_widget(self.star_button)
+
+        # Help Button
+        self.help_button = Button(text="Usage Instructions", on_press=self.help_menu, size_hint=(0.3, 1), background_color=(0.2, 0.6, 1, 1), bold=True) 
+        self.add_widget(self.help_button)
+        #TODO
+
+    def help_menu(self, instance):
+        """ Help Menu """
+        #TODO
+
+
+    def try_star(self, instance):
+        """ Gets Temperature (K), Luminosity(L/Lo), Radius(R/Ro), Absolute magnitude(Mv), Star color """
+        Temperature = self.temperature_box.text.strip()
+        Luminosity = self.temperature_box.text.strip()
+        #TODO
 
 def dataFrame():
     """Import star CSV and process data"""
@@ -41,8 +107,11 @@ def dataFrame():
     
     return X, y, spectral_classes
 
-def main():
+def main(user_input):
     """Classify star types and make predictions"""
+    new_star = np.array([[3000, 1.5, 1.2, 4.5, 3]])  # Example feature values (adjust as needed)
+    
+    # Create dataframe
     X, y, spectral_classes = dataFrame()
 
     # Split data into training and testing sets
@@ -61,7 +130,7 @@ def main():
     print(classification_report(y_test, predict))
     
     # Example: Make a prediction for a new star
-    new_star = np.array([[3000, 1.5, 1.2, 4.5, 3]])  # Example feature values (adjust as needed)
+    
     predicted_class = clf.predict(new_star)
     
     # Display the predicted Spectral Class
@@ -82,10 +151,16 @@ def main():
     # Plot Features that were important for prediction
     feature_importances = clf.feature_importances_
 
-    plt.barh(X.columns, feature_importances, cmap="Reds")
+    plt.barh(X.columns, feature_importances, color="Red")
     plt.xlabel('Feature Importance')
     plt.title('Feature Importance in Random Forest Classifier')
     plt.show()
 
 
-main()
+class StarApp(App):
+    def build(self):
+        # return StarUI as root widget
+        return StarUI()
+ 
+if __name__ == '__main__':
+    StarApp().run()
