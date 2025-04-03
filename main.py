@@ -64,4 +64,16 @@ def main():
     ### Display the predicted Spectral Class
     print("Predicted Spectral Class:", spectral_classes[predicted_class[0]])
 
+    conf_matrix = confusion_matrix(y_test, predict)
+
+    plt.figure(figsize=(8, 6))
+    sns.heatmap(conf_matrix, annot=True, fmt='g', cmap='Blues', cbar=False, 
+               xticklabels=iris.target_names, yticklabels=iris.target_names)
+
+    plt.title('Confusion Matrix Heatmap')
+    plt.xlabel('Predicted Labels')
+    plt.ylabel('True Labels')
+    plt.show()
+
+
 main()
