@@ -1,10 +1,10 @@
 """ 
-    Project Name: Star Spectral Classification Prediction Application Utilizing an Sklearn Random Forest Classifier
-    Author: Joseph Kneusel
-    Contact: https://github.com/JBKneusel
-    License: MIT License
-    ML Models: Random Forest Classifier
-    Foundation: Python, Kivy, Sklearn, Numpy, Pandas, Matplotlib, Seaborn
+    🛠️ Project Name: Star Spectral Classification Prediction Application Utilizing an Sklearn Random Forest Classifier
+    🖋️ Author: Joseph Kneusel
+    📱 Contact: https://github.com/JBKneusel
+    ⚖️ License: MIT License
+    🤖 ML Models : Random Forest Classifier 
+    🚧 Foundation: Python, Kivy, Sklearn, Numpy, Pandas, Matplotlib, Seaborn
 """
 
 """ Libraries """
@@ -19,7 +19,7 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.metrics import confusion_matrix
 
 def dataFrame():
-    """Import star CSV and process data"""
+    """📑 Import star CSV and process data"""
 
     df = pd.read_csv("6 class csv.csv")
 
@@ -42,12 +42,12 @@ def dataFrame():
     X = df.drop(columns=['Spectral Class', 'Star type'])  ### Features (excluding non-predictive columns)
     y = df['Spectral Class']  ### Target (classification labels)
     
-    return X, y, label_enc_color, label_enc_spectral
+    return X, y, label_enc_color, label_enc_spectral, spectral_classes
 
 def train_model():
-    """ Train our RandomForest """
+    """🤖 Train our RandomForest """
     # Create dataframe
-    X, y, label_enc_color, label_enc_spectral = dataFrame()
+    X, y, label_enc_color, label_enc_spectral, spectral_classes = dataFrame()
 
     # Split data into training and testing sets
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
@@ -64,22 +64,6 @@ def train_model():
     print(f"Accuracy: {accuracy:.2f}")
     print(classification_report(y_test, predict))
 
-    return clf, label_enc_color, label_enc_spectral, X.columns
-
-
-def classifier(user_input, clf, label_enc_color, label_enc_spectral, feature_names, X_test, y_test, spectral_classes, predict):
-    """Classify star types and make predictions"""
-    
-    # Encode "Star Color"
-    color_str = user_input[0][4]
-    user_input[0][4] = label_enc_color.transform([color_str])[0]
-
-    # Predict the user's star
-    predicted_class = clf.predict(user_input)
-    
-    # Display the predicted Spectral Class
-    print("Predicted Spectral Class:", spectral_classes[predicted_class[0]])
-
     # Plot Confusion Matrix Heatmap
     conf_matrix = confusion_matrix(y_test, predict)
 
@@ -95,7 +79,29 @@ def classifier(user_input, clf, label_enc_color, label_enc_spectral, feature_nam
     # Plot Features that were important for prediction
     feature_importances = clf.feature_importances_
 
-    plt.barh(X.columns, feature_importances, color="Red")
+    plt.figure(figsize=(15, 5))
+    plt.barh(X.columns, feature_importances, color="DodgerBlue")
     plt.xlabel('Feature Importance')
     plt.title('Feature Importance in Random Forest Classifier')
     plt.show()
+
+    return clf, label_enc_color, label_enc_spectral, X.columns, X_test, y_test, predict
+
+
+def classifier(user_input, clf, label_enc_color, label_enc_spectral, feature_names, X_test, y_test, spectral_classes, predict):
+    """📊 Classify star types and make predictions"""
+    
+    # Encode "Star Color"
+    color_str = user_input[0][4]
+    user_input[0][4] = label_enc_color.transform([color_str])[0]
+
+    # Predict the user's star
+    predicted_class = clf.predict(user_input)
+
+    #Encoding for predicted Label
+    predicted_label = spectral_classes[predicted_class[0]]
+    
+    # Display the predicted Spectral Class
+    print("Predicted Spectral Class:", spectral_classes[predicted_class[0]])
+
+    return predicted_label
