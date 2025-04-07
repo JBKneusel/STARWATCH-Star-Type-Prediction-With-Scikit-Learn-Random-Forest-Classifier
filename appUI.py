@@ -14,6 +14,7 @@ from data_wrangler import classifier, train_model, dataFrame
 import numpy as np
 from kivy.app import App
 from kivy.clock import mainthread
+from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.button import Button
@@ -23,27 +24,53 @@ from kivy.uix.textinput import TextInput
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.anchorlayout import AnchorLayout
 from functools import wraps
+from kivy.clock import Clock
 
 # Set Kivy Window Size
 from kivy.core.window import Window
 Window.size = (1000, 500)
 
+class StarWrapper(FloatLayout):
+    """Floating UI Wrapper"""
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+    #-------- Configure UI Wrapper--------#
+
+        self.ui = StarUI(wrapper=self)
+        self.add_widget(self.ui)
+
+    #-------- Loading Gif Layout--------#
+
+        self.loading_gif = Image(source="", anim_delay=0.05, size_hint=(None,None), size=(100,100), pos_hint={'center_x':0.5, 'center_y': 0.5}, opacity=0)
+        self.add_widget(self.loading_gif)
+
+    def show_loader(self, show=True):
+        """Show the Loader"""
+        self.loading_gif.opacity = 1 if show else 0
+
 class StarUI(BoxLayout):
     """🌟 Central UI Class for StarWatch 🌟"""
-    def __init__(self, **var_args):
+    def __init__(self, wrapper=None, **var_args):
         super(StarUI, self).__init__(orientation='vertical', padding=10, spacing=2, **var_args)
 
-        #-------- Model Setup --------#
+    #-------- Reference FloatLayout Wrapper--------#
+
+        self.wrapper = wrapper
+
+    #-------- Model Setup --------#
 
         self.clf, self.label_enc_color, self.label_enc_spectral, self.feature_columns, self.X_test, self.y_test, self.predict = train_model()
 
-        # # ------- Left Side: Image ------- #
-        # self.image = Image(source='star_diagram.png', size_hint=(0.5, 1))  # Adjust image size hint
-        # self.add_widget(self.image)
+    # ------- Left Side: Image ------- #
 
-        #TODO: Get image working for left side 
+        # Render and Image of the Hertzsprung-Russell Diagram
+        self.image = Image(source='385474497.jpg', size_hint=(3, 6))  # Adjust image size hint
+        self.add_widget(self.image)
 
-        #-------- Input Fields Layout --------#
+        # 🔧🔧🔧 TODO: Get image working for left side (HR Diagram), set background image to something fitting
+
+    #-------- Input Fields Layout --------#
 
         # Observed Star Temperature Input Box
         self.temperature_box = TextInput(hint_text="Enter Calculated Star Temperature (K)", size_hint=(0.7, 1), multiline=False) 
@@ -65,7 +92,7 @@ class StarUI(BoxLayout):
         self.color_box = TextInput(hint_text="Enter Observed Star Color", size_hint=(0.7, 1), multiline=False) 
         self.add_widget(self.color_box)
 
-        #-------- Button Layout --------#
+    #-------- Button Layout --------#
 
         # Submit Star Button
         self.star_button = Button(text="Submit Star", on_press=self.try_star, size_hint=(0.3, 1), background_color=(0.2, 0.6, 1, 1), bold=True) 
@@ -75,15 +102,12 @@ class StarUI(BoxLayout):
         self.help_button = Button(text="Usage Instructions", on_press=self.help_menu, size_hint=(0.3, 1), background_color=(0.2, 0.6, 1, 1), bold=True) 
         self.add_widget(self.help_button)
 
-        #-------- Output Fields Layout --------#
+    #-------- Output Fields Layout --------#
 
         self.result_label = Label(text="Output", font_size=12)
         self.add_widget(self.result_label)
 
-    @mainthread # Runs method of UI thread:
-    def display_to_user(self, result):
-        """📝 This handles anything we need displayed for the user """
-        self.result_label.text = f"Predicted Spectral Class: {result}"
+    #-------- Safety Methods --------#
 
     def safe_action(method):
         """🛡️ Decorator to catch and display errors from UI actions."""
@@ -97,9 +121,40 @@ class StarUI(BoxLayout):
                 self.display_to_user(f"Error: {err}")
         return wrapper
 
+    def safe_loader(method):
+        """🛡️ Decorator to catch and display errors from UI loader behavior."""
+        @wraps(method)
+        def wrapper(self, *args, **kwargs):
+            try:
+                if self.wrapper:
+                    self.wrapper.show_loader(False) # Kill loading gif if err 
+                return method(self, *args, **kwargs)
+            except ValueError:
+                self.display_to_user("Enter a valid input.") 
+            except Exception as err:
+                self.display_to_user(f"Error: {err}")
+        return wrapper
+
+    #-------- UI Interactions --------#
+
+    @mainthread # Runs method of UI thread:
+    def display_to_user(self, result):
+        """📝 This handles anything we need displayed for the user """
+        self.result_label.text = f"Predicted Spectral Class: {result}"
+
+    @safe_action
     def help_menu(self, instance):
         """🧭 Help menu, offers help to Noobies who can't fill out a form """
         self.result_label.text = "\n\nInput Example: 34000,6.3,1.0,1,0,Blue"
+        # 🔧🔧🔧 TODO: Build out help menu, add error doc and 
+
+    @safe_loader
+    def speak_to_wrapper(self, instance):
+        """Handles UI Wrapper to Show Loader"""
+        if self.wrapper:
+            self.wrapper.show_loader(True)
+        # Kivy native: schedules noted funct to run in delta-time with a delay of n seconds
+        Clock.schedule_once(lambda dt: self.try_star(), 0.2)
 
     @safe_action
     def try_star(self, instance):
@@ -135,5 +190,6 @@ class StarUI(BoxLayout):
 
 class StarApp(App):
     def build(self):
+        icon = '108-1088060_3144-x-3003-12-solar-system-planets-clipart.png'
         # return StarUI as root widget
-        return StarUI()
+        return StarWrapper()
