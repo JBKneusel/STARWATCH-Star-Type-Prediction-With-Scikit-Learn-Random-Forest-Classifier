@@ -25,13 +25,10 @@ from kivy.uix.scrollview import ScrollView
 from kivy.uix.anchorlayout import AnchorLayout
 from functools import wraps
 from kivy.clock import Clock
-
-# Set Kivy Window Size
 from kivy.core.window import Window
-Window.size = (1000, 500)
 
 class StarWrapper(FloatLayout):
-    """Floating UI Wrapper"""
+    """🌟 Floating UI Wrapper 🌟"""
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
@@ -42,7 +39,7 @@ class StarWrapper(FloatLayout):
 
     #-------- Loading Gif Layout--------#
 
-        self.loading_gif = Image(source="", anim_delay=0.05, size_hint=(None,None), size=(100,100), pos_hint={'center_x':0.5, 'center_y': 0.5}, opacity=0)
+        self.loading_gif = Image(source="LoadingGif.gif", anim_delay=0.05, size_hint=(None,None), size=(100,100), pos_hint={'center_x':0.5, 'center_y': 0.5}, opacity=0)
         self.add_widget(self.loading_gif)
 
     def show_loader(self, show=True):
@@ -65,7 +62,7 @@ class StarUI(BoxLayout):
     # ------- Left Side: Image ------- #
 
         # Render and Image of the Hertzsprung-Russell Diagram
-        self.image = Image(source='385474497.jpg', size_hint=(3, 6))  # Adjust image size hint
+        self.image = Image(source='385474497.jpg', size_hint_x=1, size_hint_y=1, pos_hint={'x': 0, 'top': 1})  # Adjust image size hint
         self.add_widget(self.image)
 
         # 🔧🔧🔧 TODO: Get image working for left side (HR Diagram), set background image to something fitting
@@ -73,38 +70,38 @@ class StarUI(BoxLayout):
     #-------- Input Fields Layout --------#
 
         # Observed Star Temperature Input Box
-        self.temperature_box = TextInput(hint_text="Enter Calculated Star Temperature (K)", size_hint=(0.7, 1), multiline=False) 
+        self.temperature_box = TextInput(hint_text="Enter Calculated Star Temperature (K)", size_hint_x=1, size_hint_y=0.1, font_size=12, multiline=False) 
         self.add_widget(self.temperature_box)
 
         # Observed Star Luminosity Input Box
-        self.luminosity_box = TextInput(hint_text="Enter Calculated Star Luminosity (L/Lo)", size_hint=(0.7, 1), multiline=False) 
+        self.luminosity_box = TextInput(hint_text="Enter Calculated Star Luminosity (L/Lo)", size_hint_x=1, size_hint_y=0.1, font_size=12, multiline=False) 
         self.add_widget(self.luminosity_box)
 
         # Observed Star Radius Input Box
-        self.radius_box = TextInput(hint_text="Enter Estimated Star Radius (R/Ro)", size_hint=(0.7, 1), multiline=False) 
+        self.radius_box = TextInput(hint_text="Enter Estimated Star Radius (R/Ro)", size_hint_x=1, size_hint_y=0.1, font_size=12, multiline=False) 
         self.add_widget(self.radius_box)
 
         # Observed Star Absolute Magnitude Input Box
-        self.magnitude_box = TextInput(hint_text="Enter Calculated Star Absolute magnitude(Mv)", size_hint=(0.7, 1), multiline=False) 
+        self.magnitude_box = TextInput(hint_text="Enter Calculated Star Absolute magnitude(Mv)", size_hint_x=1, size_hint_y=0.1, font_size=12, multiline=False) 
         self.add_widget(self.magnitude_box)
 
         # Observed Star Color Input Box
-        self.color_box = TextInput(hint_text="Enter Observed Star Color", size_hint=(0.7, 1), multiline=False) 
+        self.color_box = TextInput(hint_text="Enter Observed Star Color", size_hint_x=1, size_hint_y=0.1, multiline=False, font_size=12) 
         self.add_widget(self.color_box)
 
     #-------- Button Layout --------#
 
         # Submit Star Button
-        self.star_button = Button(text="Submit Star", on_press=self.try_star, size_hint=(0.3, 1), background_color=(0.2, 0.6, 1, 1), bold=True) 
+        self.star_button = Button(text="Submit Star", on_press=self.try_star, size_hint_x=1, size_hint_y=0.1, background_color=(0.2, 0.6, 1, 1), bold=True) 
         self.add_widget(self.star_button)
 
         # Help Button
-        self.help_button = Button(text="Usage Instructions", on_press=self.help_menu, size_hint=(0.3, 1), background_color=(0.2, 0.6, 1, 1), bold=True) 
+        self.help_button = Button(text="Usage Instructions", on_press=self.help_menu, size_hint_x=1, size_hint_y=0.1, background_color=(0.2, 0.6, 1, 1), bold=True) 
         self.add_widget(self.help_button)
 
     #-------- Output Fields Layout --------#
 
-        self.result_label = Label(text="Output", font_size=12)
+        self.result_label = Label(text="Output", size_hint_x=1, size_hint_y=0.3, font_size=12)
         self.add_widget(self.result_label)
 
     #-------- Safety Methods --------#
@@ -116,7 +113,7 @@ class StarUI(BoxLayout):
             try:
                 return method(self, *args, **kwargs)
             except ValueError:
-                self.display_to_user("Input numerical values for all fields except color.")
+                self.display_to_user("Input numerical values.\n For all fields except color.")
             except Exception as err:
                 self.display_to_user(f"Error: {err}")
         return wrapper
@@ -153,8 +150,19 @@ class StarUI(BoxLayout):
         """Handles UI Wrapper to Show Loader"""
         if self.wrapper:
             self.wrapper.show_loader(True)
+
         # Kivy native: schedules noted funct to run in delta-time with a delay of n seconds
-        Clock.schedule_once(lambda dt: self.try_star(), 0.2)
+        Clock.schedule_once(lambda dt: self.try_star(), 2)
+
+     # 🔧🔧🔧 TODO: Get artificial loader display working
+
+    # def try_star_delayed(self, dt):
+    #     """This is the method that runs after a 2-second delay."""
+    #     self.try_star(None)  # You can pass `None` since the method doesn't require the event parameter in this case
+
+    #     # Hide the loader after 2 seconds delay
+    #     if self.wrapper:
+    #         self.wrapper.show_loader(False)
 
     @safe_action
     def try_star(self, instance):
@@ -190,6 +198,10 @@ class StarUI(BoxLayout):
 
 class StarApp(App):
     def build(self):
+        Window.title = "Spectral Watch"
+        Window.size = (350, 550)
+        Window.clearcolor = (0, 0, 0, 0)
+
         icon = '108-1088060_3144-x-3003-12-solar-system-planets-clipart.png'
         # return StarUI as root widget
         return StarWrapper()
