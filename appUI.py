@@ -37,6 +37,12 @@ class StarWrapper(FloatLayout):
         self.ui = StarUI(wrapper=self)
         self.add_widget(self.ui)
 
+    # ------- Help Menu, Floating ------- #
+
+        #self.help = Image(source='385474497.jpg', size_hint_x=1, size_hint_y=1, pos_hint={'x': 0, 'top': 1})
+        #self.add_widget(self.help)
+        # 🔧🔧🔧 TODO: Work floating help menu to trigger on help menu button push
+
     #-------- Loading Gif Layout--------#
 
         self.loading_gif = Image(source="LoadingGif.gif", anim_delay=0.05, size_hint=(None,None), size=(100,100), pos_hint={'center_x':0.5, 'center_y': 0.5}, opacity=0)
@@ -65,7 +71,7 @@ class StarUI(BoxLayout):
         self.image = Image(source='385474497.jpg', size_hint_x=1, size_hint_y=1, pos_hint={'x': 0, 'top': 1})  # Adjust image size hint
         self.add_widget(self.image)
 
-        # 🔧🔧🔧 TODO: Update: Image working for center
+        # 🔧🔧🔧 TODO: Update: Image working for center, consider adding support for individual images for results.
 
     #-------- Input Fields Layout --------#
 
