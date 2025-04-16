@@ -65,7 +65,7 @@ class StarUI(BoxLayout):
         self.image = Image(source='385474497.jpg', size_hint_x=1, size_hint_y=1, pos_hint={'x': 0, 'top': 1})  # Adjust image size hint
         self.add_widget(self.image)
 
-        # 🔧🔧🔧 TODO: Get image working for left side (HR Diagram), set background image to something fitting
+        # 🔧🔧🔧 TODO: Update: Image working for center
 
     #-------- Input Fields Layout --------#
 
