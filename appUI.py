@@ -17,6 +17,7 @@ from kivy.clock import mainthread
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.gridlayout import GridLayout
+from kivy.uix.popup import Popup
 from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.uix.image import Image
@@ -36,12 +37,6 @@ class StarWrapper(FloatLayout):
 
         self.ui = StarUI(wrapper=self)
         self.add_widget(self.ui)
-
-    # ------- Help Menu, Floating ------- #
-
-        #self.help = Image(source='385474497.jpg', size_hint_x=1, size_hint_y=1, pos_hint={'x': 0, 'top': 1})
-        #self.add_widget(self.help)
-        # 🔧🔧🔧 TODO: Work floating help menu to trigger on help menu button push
 
     #-------- Loading Gif Layout--------#
 
@@ -65,7 +60,7 @@ class StarUI(BoxLayout):
 
         self.clf, self.label_enc_color, self.label_enc_spectral, self.feature_columns, self.X_test, self.y_test, self.predict = train_model()
 
-    # ------- Left Side: Image ------- #
+    # ------- Central: Image ------- #
 
         # Render and Image of the Hertzsprung-Russell Diagram
         self.image = Image(source='385474497.jpg', size_hint_x=1, size_hint_y=1, pos_hint={'x': 0, 'top': 1})  # Adjust image size hint
@@ -147,9 +142,37 @@ class StarUI(BoxLayout):
 
     @safe_action
     def help_menu(self, instance):
-        """🧭 Help menu, offers help to Noobies who can't fill out a form """
-        self.result_label.text = "\n\nInput Example: 34000,6.3,1.0,1,0,Blue"
-        # 🔧🔧🔧 TODO: Build out help menu, add error doc and 
+        """🧭 Help menu, offers help to Noobies who can't fill out a form through a popup """
+        help_layout = BoxLayout(orientation='vertical', padding=10, spacing=5)
+        #help_layout.add_widget(Label())
+
+        help_text = (
+        "Enter the following:\n"
+        "- Temperature (Kelvin), Example: 34000\n"
+        "- Luminosity (L/Lo), Example: 6.3\n"
+        "- Radius (R/Ro), Example: 1.0\n"
+        "- Absolute Magnitude (Mv), Example: 1\n"
+        "- Color (e.g., Blue, Yellow, Red), Example: Blue"
+        )
+
+        help_label = Label(text=help_text, font_size=12)
+        help_layout.add_widget(help_label)
+
+        # Help menu close button functionality
+        close_button = Button(text='Exit', size_hint_y=0.3)
+        help_layout.add_widget(close_button)
+
+        # Popup layout
+        popup = Popup(
+        title="Spectral Watch Usage Instructions",
+        content=help_layout,
+        size_hint=(None, None),
+        size=(320, 300),
+        auto_dismiss=False
+        )
+
+        close_button.bind(on_press=popup.dismiss)
+        popup.open()
 
     @safe_loader
     def speak_to_wrapper(self, instance):
