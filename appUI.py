@@ -14,6 +14,7 @@ from data_wrangler import classifier, train_model, dataFrame
 import numpy as np
 from kivy.app import App
 from kivy.clock import mainthread
+from kivy.graphics import Color, RoundedRectangle
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.gridlayout import GridLayout
@@ -63,7 +64,7 @@ class StarUI(BoxLayout):
     # ------- Central: Image ------- #
 
         # Render and Image of the Hertzsprung-Russell Diagram
-        self.image = Image(source='385474497.jpg', size_hint_x=1, size_hint_y=1, pos_hint={'x': 0, 'top': 1})  # Adjust image size hint
+        self.image = Image(source='HR.jfif', size_hint_x=1, size_hint_y=1, pos_hint={'x': 0, 'top': 1})  # Adjust image size hint
         self.add_widget(self.image)
 
         # 🔧🔧🔧 TODO: Update: Image working for center, consider adding support for individual images for results.
@@ -130,7 +131,7 @@ class StarUI(BoxLayout):
             except ValueError:
                 self.display_to_user("Enter a valid input.") 
             except Exception as err:
-                self.display_to_user(f"Error: {err}")
+                self.display_to_user(f"Error: No or incorrect input.\n See Usage Instructions for more.")
         return wrapper
 
     #-------- UI Interactions --------#
@@ -229,8 +230,8 @@ class StarUI(BoxLayout):
 class StarApp(App):
     def build(self):
         Window.title = "Spectral Watch"
-        Window.size = (350, 550)
-        Window.clearcolor = (0, 0, 0, 0)
+        Window.size = (500, 720)
+        Window.clearcolor = (9/255, 17/255, 56/255, 1)
 
         icon = '108-1088060_3144-x-3003-12-solar-system-planets-clipart.png'
         # return StarUI as root widget
