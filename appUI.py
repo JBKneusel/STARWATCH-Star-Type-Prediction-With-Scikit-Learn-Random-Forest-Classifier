@@ -12,6 +12,7 @@ from data_wrangler import classifier, train_model, dataFrame
 
 """ Libraries """
 import numpy as np
+import random
 from kivy.app import App
 from kivy.clock import mainthread
 from kivy.graphics import Color, RoundedRectangle
@@ -41,7 +42,7 @@ class StarWrapper(FloatLayout):
 
     #-------- Loading Gif Layout--------#
 
-        self.loading_gif = Image(source="LoadingGif.gif", anim_delay=0.05, size_hint=(None,None), size=(100,100), pos_hint={'center_x':0.5, 'center_y': 0.5}, opacity=0)
+        self.loading_gif = Image(source="LoadingGif.gif", anim_delay=0.05, size_hint=(None,None), size=(300,300), pos_hint={'center_x':0.5, 'center_y': 0.5}, opacity=0)
         self.add_widget(self.loading_gif)
 
     def show_loader(self, show=True):
@@ -67,7 +68,7 @@ class StarUI(BoxLayout):
         self.image = Image(source='HR.jfif', size_hint_x=1, size_hint_y=1, pos_hint={'x': 0, 'top': 1})  # Adjust image size hint
         self.add_widget(self.image)
 
-        # 🔧🔧🔧 TODO: Update: Image working for center, consider adding support for individual images for results.
+        # 🔧🔧🔧 IMPROVE: Add more image support
 
     #-------- Input Fields Layout --------#
 
@@ -117,7 +118,7 @@ class StarUI(BoxLayout):
             except ValueError:
                 self.display_to_user("Input numerical values.\n For all fields except color.")
             except Exception as err:
-                self.display_to_user(f"Error: No or incorrect input.\n See Usage Instructions for more.")
+                self.display_to_user(f"Error: {err} No or incorrect input.\n See Usage Instructions for more.")
         return wrapper
 
     def safe_loader(method):
@@ -131,7 +132,7 @@ class StarUI(BoxLayout):
             except ValueError:
                 self.display_to_user("Enter a valid input.") 
             except Exception as err:
-                self.display_to_user(f"Error: No or incorrect input.\n See Usage Instructions for more.")
+                self.display_to_user(f"Error: {err} No or incorrect input.\n See Usage Instructions for more.")
         return wrapper
 
     #-------- UI Interactions --------#
@@ -182,9 +183,7 @@ class StarUI(BoxLayout):
             self.wrapper.show_loader(True)
 
         # Kivy native: schedules noted funct to run in delta-time with a delay of n seconds
-        Clock.schedule_once(lambda dt: self.try_star_delayed(), 2)
-
-     # 🔧🔧🔧 TODO: Get artificial loader display working
+        Clock.schedule_once(lambda dt: self.try_star_delayed(dt), random.randint(1,8))
 
     @safe_loader
     def try_star_delayed(self, dt):
@@ -205,8 +204,8 @@ class StarUI(BoxLayout):
         radius = float(self.radius_box.text.strip())
         magnitude = float(self.magnitude_box.text.strip())
             
-        # Color is not numerical, so keep it like this.
-        color = self.color_box.text.strip()
+        # Dealing with the color input is more tricky. we need to 
+        color = self.color_box.text.strip().capitalize()
 
         # Input values into numpy array for analysis
         new_star = np.array([[temperature, luminosity, radius, magnitude, color]])
@@ -224,6 +223,7 @@ class StarUI(BoxLayout):
         predict=self.predict
         )
 
+        print("New star array:", new_star)
         # Display result to user screen
         self.display_to_user(result)
 

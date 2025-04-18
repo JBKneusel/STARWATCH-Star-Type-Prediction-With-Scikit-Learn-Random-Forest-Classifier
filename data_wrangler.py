@@ -18,13 +18,45 @@ from sklearn.metrics import accuracy_score, classification_report
 from sklearn.preprocessing import LabelEncoder
 from sklearn.metrics import confusion_matrix
 
+
+def normalize_star_colors(color):
+    """ Normalize the star color entires"""
+    color = color.strip().lower() # get color entries and lower them for consistency
+    if color.startswith('yell'):
+        return "Yellow"
+    elif color.startswith('whit'):
+        return "White"
+    elif color.startswith('blue'):
+        return "Blue"
+    elif color.startswith('red'):
+        return "Red"
+    elif color.startswith('oran'):
+        return "Orange"
+    else:
+        return "Other"
+
 def dataFrame():
     """📑 Import star CSV and process data"""
+
+    #-------- Cleaning Data --------#
 
     df = pd.read_csv("6 class csv.csv")
 
     # Check for any missing values
-    df.isnull().sum().dropna()
+    df.dropna(inplace=True)
+
+    # Clean the star color column
+    df['Star color'] = df['Star color'].apply(normalize_star_colors) # Deal with star color str inputs
+
+    # Establish a significance 
+    sig_cutoff = len(df)*0.05 # Establish the significance cutoff for elements in our dataset as being greater than 5%
+
+    # Check for color outliers and drop them if they are less than 5% of data
+    color_counts = df['Star color'].value_counts()
+    valid_colors = color_counts[color_counts <= sig_cutoff].index.tolist()
+    df = df[df['Star color'].isin(valid_colors)]
+
+    #-------- Label Encoding --------#
     
     # Encode the target variable 'Spectral Class' with LabelEncoder
     label_enc_spectral = LabelEncoder()
@@ -39,13 +71,16 @@ def dataFrame():
     df['Star color'] = label_enc_color.fit_transform(df['Star color'])
 
     # Features (X) and target variable (y)
-    X = df.drop(columns=['Spectral Class', 'Star type'])  ### Features (excluding non-predictive columns)
-    y = df['Spectral Class']  ### Target (classification labels)
+    X = df.drop(columns=['Spectral Class', 'Star type'])  # Features (excluding non-predictive columns)
+    y = df['Spectral Class']  # Target (classification labels)
     
     return X, y, label_enc_color, label_enc_spectral, spectral_classes
 
 def train_model():
     """🤖 Train our RandomForest """
+
+    #-------- Training and Testing --------#
+
     # Create dataframe
     X, y, label_enc_color, label_enc_spectral, spectral_classes = dataFrame()
 
@@ -58,6 +93,8 @@ def train_model():
 
     # Make predictions on the test set
     predict = clf.predict(X_test)
+
+    #-------- Model Results and Output --------#
 
     # Calculate accuracy and print classification report
     accuracy = accuracy_score(y_test, predict)
@@ -90,6 +127,8 @@ def train_model():
 
 def classifier(user_input, clf, label_enc_color, label_enc_spectral, feature_names, X_test, y_test, spectral_classes, predict):
     """📊 Classify star types and make predictions"""
+
+    #-------- Make Predictions --------#
     
     # Encode "Star Color"
     color_str = user_input[0][4]
