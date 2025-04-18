@@ -93,7 +93,7 @@ class StarUI(BoxLayout):
     #-------- Button Layout --------#
 
         # Submit Star Button
-        self.star_button = Button(text="Submit Star", on_press=self.try_star, size_hint_x=1, size_hint_y=0.1, background_color=(0.2, 0.6, 1, 1), bold=True) 
+        self.star_button = Button(text="Submit Star", on_press=self.speak_to_wrapper, size_hint_x=1, size_hint_y=0.1, background_color=(0.2, 0.6, 1, 1), bold=True) 
         self.add_widget(self.star_button)
 
         # Help Button
@@ -116,7 +116,7 @@ class StarUI(BoxLayout):
             except ValueError:
                 self.display_to_user("Input numerical values.\n For all fields except color.")
             except Exception as err:
-                self.display_to_user(f"Error: {err}")
+                self.display_to_user(f"Error: No or incorrect input.\n See Usage Instructions for more.")
         return wrapper
 
     def safe_loader(method):
@@ -181,17 +181,18 @@ class StarUI(BoxLayout):
             self.wrapper.show_loader(True)
 
         # Kivy native: schedules noted funct to run in delta-time with a delay of n seconds
-        Clock.schedule_once(lambda dt: self.try_star(), 2)
+        Clock.schedule_once(lambda dt: self.try_star_delayed(), 2)
 
      # 🔧🔧🔧 TODO: Get artificial loader display working
 
-    # def try_star_delayed(self, dt):
-    #     """This is the method that runs after a 2-second delay."""
-    #     self.try_star(None)  # You can pass `None` since the method doesn't require the event parameter in this case
+    @safe_loader
+    def try_star_delayed(self, dt):
+         """This is the method that runs after a 2-second delay."""
+         self.try_star(None)  # You can pass `None` since the method doesn't require the event parameter in this case
 
-    #     # Hide the loader after 2 seconds delay
-    #     if self.wrapper:
-    #         self.wrapper.show_loader(False)
+        # Hide the loader after 2 seconds delay
+         if self.wrapper:
+             self.wrapper.show_loader(False)
 
     @safe_action
     def try_star(self, instance):

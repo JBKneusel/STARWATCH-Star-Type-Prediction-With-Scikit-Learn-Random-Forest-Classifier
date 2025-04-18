@@ -1,0 +1,11 @@
+# Core Scientific Libraries
+numpy
+pandas
+matplotlib
+seaborn
+
+# Machine Learning
+scikit-learn
+
+# Kivy GUI Framework
+kivy[base]  # or kivy[full]
