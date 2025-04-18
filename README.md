@@ -1,6 +1,6 @@
 # Star-Type-Prediction-With-Scikit-Learn-Random-Forest-Classifier
 
-![Alt Text](385474497.jpg)
+![Alt Text](HRD.jpg)
 
 ## 📡 Project Abstract
 This project implements a random forest classifier to predict the spectral classification of stars based on their observed attributes. 
