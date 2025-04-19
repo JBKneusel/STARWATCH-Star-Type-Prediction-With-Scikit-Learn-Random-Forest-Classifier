@@ -68,8 +68,6 @@ class StarUI(BoxLayout):
         self.image = Image(source='HR.jfif', size_hint_x=1, size_hint_y=1, pos_hint={'x': 0, 'top': 1})  # Adjust image size hint
         self.add_widget(self.image)
 
-        # 🔧🔧🔧 IMPROVE: Add more image support
-
     #-------- Input Fields Layout --------#
 
         # Observed Star Temperature Input Box
