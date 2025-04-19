@@ -53,7 +53,7 @@ def dataFrame():
 
     # Check for color outliers and drop them if they are less than 5% of data
     color_counts = df['Star color'].value_counts()
-    valid_colors = color_counts[color_counts <= sig_cutoff].index.tolist()
+    valid_colors = color_counts[color_counts >= sig_cutoff].index.tolist()
     df = df[df['Star color'].isin(valid_colors)]
 
     #-------- Label Encoding --------#

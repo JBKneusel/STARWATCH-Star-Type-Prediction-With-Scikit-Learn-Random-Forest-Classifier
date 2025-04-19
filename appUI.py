@@ -149,12 +149,12 @@ class StarUI(BoxLayout):
         #help_layout.add_widget(Label())
 
         help_text = (
-        "Enter the following:\n"
-        "- Temperature (Kelvin), Example: 34000\n"
-        "- Luminosity (L/Lo), Example: 6.3\n"
-        "- Radius (R/Ro), Example: 1.0\n"
-        "- Absolute Magnitude (Mv), Example: 1\n"
-        "- Color (e.g., Blue, Yellow, Red), Example: Blue"
+        "Enter the following:\n\n"
+        "- Temperature (Kelvin), Example: 34000\n\n"
+        "- Luminosity (L/Lo), Example: 6.3\n\n"
+        "- Radius (R/Ro), Example: 1.0\n\n"
+        "- Absolute Magnitude (Mv), Example: 1\n\n"
+        "- Color (e.g., Blue, Yellow, Red), Example: Blue\n"
         )
 
         help_label = Label(text=help_text, font_size=12)
@@ -169,7 +169,7 @@ class StarUI(BoxLayout):
         title="Spectral Watch Usage Instructions",
         content=help_layout,
         size_hint=(None, None),
-        size=(320, 300),
+        size=(320, 400),
         auto_dismiss=False
         )
 
