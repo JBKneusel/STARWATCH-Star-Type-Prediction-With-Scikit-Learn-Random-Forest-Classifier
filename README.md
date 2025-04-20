@@ -1,4 +1,4 @@
-# STARWATCH Star-Type-Prediction-With-Scikit-Learn-Random-Forest-Classifier
+# STARWATCH: Star-Type-Prediction-With-Scikit-Learn-Random-Forest-Classifier
 
 ![Alt Text](HRD.jpg)
 
