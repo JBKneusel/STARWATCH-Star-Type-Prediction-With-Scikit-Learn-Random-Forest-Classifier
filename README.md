@@ -87,13 +87,13 @@ python3 main.py
 ```
 First, you will be presented with a confusion matrix demonstrating the training results for the random forest classifier. The x-axis represents predicted labels, and the y-axis represents true labels.
 
-![Alt Text](Confusion Matrix.png)
+![Alt Text](Confusion%20Matrix.PNG)
 
 Next, you will get a bar-chart of feature importance, indicating which features were the most important for training.
 
-![Alt Text](Feature Importance.png)
+![Alt Text](Feature%20Importance.PNG)
 
 Lastly, you will be presented with the GUI. Please select "Usage Instructions" to see how to fill out the form.
 
-![Alt Text](GUI.png)
+![Alt Text](GUI.PNG)
 
