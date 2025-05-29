@@ -80,5 +80,12 @@ Install application requirements:
 ```
 pip install -r requirements.txt
 ```
+Then run main.py
+
+```
+python3 main.py
+```
+First, you will be presented with a confusion matrix demonstrating the training results for the random forest classifier. The x-axis represents predicted labels, and the y-axis represents true labels.
+
 
 
