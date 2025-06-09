@@ -26,9 +26,10 @@ from kivy.uix.image import Image
 from kivy.uix.textinput import TextInput
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.anchorlayout import AnchorLayout
-from functools import wraps
 from kivy.clock import Clock
 from kivy.core.window import Window
+from functools import wraps
+from utils import resource_path
 
 class StarWrapper(FloatLayout):
     """🌟 Floating UI Wrapper 🌟"""
@@ -42,7 +43,7 @@ class StarWrapper(FloatLayout):
 
     #-------- Loading Gif Layout--------#
 
-        self.loading_gif = Image(source="LoadingGif.gif", anim_delay=0.05, size_hint=(None,None), size=(300,300), pos_hint={'center_x':0.5, 'center_y': 0.5}, opacity=0)
+        self.loading_gif = Image(source=resource_path("LoadingGif.gif"), anim_delay=0.05, size_hint=(None,None), size=(300,300), pos_hint={'center_x':0.5, 'center_y': 0.5}, opacity=0)
         self.add_widget(self.loading_gif)
 
     def show_loader(self, show=True):
@@ -65,7 +66,7 @@ class StarUI(BoxLayout):
     # ------- Central: Image ------- #
 
         # Render and Image of the Hertzsprung-Russell Diagram
-        self.image = Image(source='HR.jfif', size_hint_x=1, size_hint_y=1, pos_hint={'x': 0, 'top': 1})  # Adjust image size hint
+        self.image = Image(source=resource_path('HR.jfif'), size_hint_x=1, size_hint_y=1, pos_hint={'x': 0, 'top': 1})  # Adjust image size hint
         self.add_widget(self.image)
 
     #-------- Input Fields Layout --------#
@@ -231,6 +232,6 @@ class StarApp(App):
         Window.size = (500, 720)
         Window.clearcolor = (9/255, 17/255, 56/255, 1)
 
-        icon = '108-1088060_3144-x-3003-12-solar-system-planets-clipart.png'
+        icon = resource_path('108-1088060_3144-x-3003-12-solar-system-planets-clipart.png')
         # return StarUI as root widget
         return StarWrapper()

@@ -17,6 +17,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, classification_report
 from sklearn.preprocessing import LabelEncoder
 from sklearn.metrics import confusion_matrix
+from utils import resource_path
 
 
 def normalize_star_colors(color):
@@ -40,7 +41,7 @@ def dataFrame():
 
     #-------- Cleaning Data --------#
 
-    df = pd.read_csv("6 class csv.csv")
+    df = pd.read_csv(resource_path("6 class csv.csv"))
 
     # Check for any missing values
     df.dropna(inplace=True)
@@ -111,7 +112,7 @@ def train_model():
     plt.title('Confusion Matrix Heatmap')
     plt.xlabel('Predicted Labels')
     plt.ylabel('True Labels')
-    plt.show()
+    #plt.show()
 
     # Plot Features that were important for prediction
     feature_importances = clf.feature_importances_
@@ -120,7 +121,7 @@ def train_model():
     plt.barh(X.columns, feature_importances, color="DodgerBlue")
     plt.xlabel('Feature Importance')
     plt.title('Feature Importance in Random Forest Classifier')
-    plt.show()
+    #plt.show()
 
     return clf, label_enc_color, label_enc_spectral, X.columns, X_test, y_test, predict
 
