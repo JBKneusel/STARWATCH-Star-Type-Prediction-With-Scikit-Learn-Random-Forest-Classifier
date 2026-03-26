@@ -5,7 +5,7 @@ Star Type Prediction With Scikit Learn Random Forest Classifier
 ![Alt Text](HRD.jpg)
 
 ## 📡 Project Abstract
-This project implements a random forest classifier to predict the spectral classification of stars based on their observed attributes, as on the HR Diagram.
+Full-stack ML astronomy application for real-time stellar spectral classification, built with scikit-learn and deployed on Amazon Web Services / Microsoft Azure.
 
 **What is the HR Diagram?**
 
